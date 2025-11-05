@@ -1,6 +1,9 @@
 from django.test import TestCase
-from diary.models import Entry, Tag, User
-# Create your tests here.
+from diary.models import Entry, Tag
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
 class EntryTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username="Donald")
