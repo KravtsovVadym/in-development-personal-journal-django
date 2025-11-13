@@ -1,11 +1,14 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.db import IntegrityError
 from diary.models import Entry, Tag
 
 User = get_user_model()
 
 class EntryCaseTest(TestCase):
 
+        
+    '''Creates a new object each time for each test'''
     def setUp(self):
         self.author = User.objects.create_user(username="Vadim")
 
@@ -19,12 +22,17 @@ class EntryCaseTest(TestCase):
         self.assertEqual(Entry.objects.count(), 0)
 
     def test_case_many_to_many(self):
-        entry = Entry.objects.create(
+        self.entry = Entry.objects.create(
             author=self.author,
             title="test header",
             content="Here is the content for Django tests")
         tag = Tag.objects.create(name="Developers")
-        entry.tags.add(tag)
-        self.assertEqual(entry.tags.count(), 1)
-        self.assertIn(entry, tag.entries.all())
-        
+        self.entry.tags.add(tag)
+        self.assertEqual(self.entry.tags.count(), 1)
+        self.assertIn(self.entry, tag.entries.all())
+    
+    def test_case_unniquess(self):
+        '''We check the Tag model for uniqueness'''
+        with self.assertRaises(IntegrityError):
+            tag1 = Tag.objects.create(name="Developers")
+            tag2 = Tag.objects.create(name="Developers")
