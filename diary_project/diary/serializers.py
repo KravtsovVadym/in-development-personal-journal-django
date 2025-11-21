@@ -17,3 +17,26 @@ class EntrySerializers(serializers.ModelSerializer):
         write_only=True,
         source="tags"
     )
+    author_username = serializers.CharField(
+        source="author.username",
+        read_only=True
+        )
+    
+    class Meta:
+        model = Entry
+        field = [
+            "id",
+            "title",
+            "tags",
+            "tag_id",
+            "context",
+            "create",
+            "update",
+            "author_username",
+            ]
+        read_only_field =[
+            "id",
+            "created",
+            "update",
+            "author_username"
+        ]
