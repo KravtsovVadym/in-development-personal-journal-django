@@ -49,13 +49,13 @@ class Entry(models.Model):
         null=False,
         help_text="Enter content"
     )
-    created_at = models.DateTimeField(
+    created = models.DateTimeField(
         verbose_name="Created",
         db_index=True,
         auto_now_add=True,
         help_text="Date of creation"
     )
-    updated_at = models.DateTimeField(
+    updated = models.DateTimeField(
         verbose_name="Updated",
         auto_now=True,
         help_text="Date update"
@@ -68,12 +68,12 @@ class Entry(models.Model):
     )
 
     class Meta:
-        ordering = ["-created_at"]
+        ordering = ["-created"]
         verbose_name = "Entry"
         verbose_name_plural = "Entries"
         indexes = [
-            models.Index(fields=["-created_at"]),
-            models.Index(fields=["author", "-created_at"])
+            models.Index(fields=["-created"]),
+            models.Index(fields=["author", "-created"])
         ]
 
     def __str__(self):
