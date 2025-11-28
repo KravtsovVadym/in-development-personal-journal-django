@@ -18,3 +18,8 @@ class EntryViewSet(viewsets.ModelViewSet):
     search_fields = ["title", "content","tags__name"]
     ordering_fields = ["created"]
     ordering = ["-created"]
+
+
+    def get_queryset(self):
+        """Return only the entries that belong to the current authenticated user"""
+        return Entry.objects.filter(author=self.request.user)
