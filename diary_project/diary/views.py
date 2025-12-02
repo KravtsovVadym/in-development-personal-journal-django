@@ -26,12 +26,21 @@ class EntryViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
-    @action(detail=False, methods=['get'])
-    def by_tag(self, request):
-        tag_name = request.query_params.get('name')
+    @action(detail=False, method=["get"])
+    def by_tag(self,request):
+        tag_name = request.query_params.get("name")
         if tag_name:
-            entries = self.get_queryset().filter(tags__name=tag_name)
+            entries = self.get_queryset().filter(tag__name=tag_name)
             serializer = self.get_serializer(entries, many=True)
             return Response(serializer.data)
-        return Response({'error': 'Tag name required'}, status=400)
-
+        return Response({"error": "Tag name required"}, status=400)
+    
+    @action(detail=True, method=True)
+    def similar(self, request):
+        entry = self.get_object()
+        similar_entries = Entry.objects.filter(
+            tags__in=entry.tags.all(),
+            author=request.user
+        ).exclude(id=entry.id).distinct()
+        serializer = self.get_serializer(similar_entries, many=True)
+        return Response(serializer.data)
