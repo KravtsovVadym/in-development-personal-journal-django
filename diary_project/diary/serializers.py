@@ -29,15 +29,15 @@ class EntrySerializer(serializers.ModelSerializer):
             "title",
             "tags",
             "tag_ids",
-            "context",
-            "create",
-            "update",
+            "content",
+            "created",
+            "updated",
             "author_username",
             ]
         read_only_fields = [
             "id",
             "created",
-            "update",
+            "updated",
             "author_username"
         ]
 
